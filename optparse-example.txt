@@ -1,0 +1,40 @@
+
+import optparse
+
+def main():
+
+    global options, args
+    (options, args) = process_options()
+
+
+def process_options():
+    """ process commandline options """
+    usage = """usage: ./%prog [options]
+    use -h for help / option descriptions 
+    """
+
+    parser = optparse.OptionParser(usage)
+    parser.add_option("-s", "--start", dest="start", help="""Enter the starting year and two digit week-of-year number in YYYY-WW format. Examples: -s 2015-08 or --start=2015-08. Default is current year, week 00.""")
+    parser.add_option("-e", "--end", dest="end", help="""Enter the ending year and two digit week-of-year number in YYYY-WW format. Examples: -e 2015-45 or --end=2015-45. Default is current year, week 52.""")
+    parser.add_option("-d", "--debug", action="store_true", dest="debug", help="""Optional.  Dump debug (vice info) output to the command line interface.  Debug-level output is automatically logged to rotating log files and is far easier to review there.""")
+    parser.add_option("-o", "--output", action="store_true", dest="output", help="""Optional. This option will create a local file with the status results based on your parameters. This info will automatically be in the log file and pushed to the terminal, but this option allows you to get a clean (non-logging) output.""")
+
+    (options, args) = parser.parse_args()
+
+    if options.start:
+        if not re.match('\d{4}-\d{2}', options.start):
+            print('-s parameter :%s: does not match required format' % options.start)
+            sys.exit(1)
+    else:
+        # Use current year and 00 week
+        options.start = "%s-00" % date.today().year
+
+    if options.end:
+        if not re.match('\d{4}-\d{2}', options.end):
+            print('-e parameter does not match required format')
+            sys.exit(1)
+    else:
+        # Use current year and 52 week
+        options.end = "%s-52" % date.today().year
+
+    return (options, args)

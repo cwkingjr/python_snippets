@@ -1,0 +1,43 @@
+import logging, logging.handlers
+
+def main():
+
+    LOG_FILENAME = 'log-script-name.log'
+
+    ########### 
+    ##  Logger set up
+
+    # Set up local stdin and file log destinations
+    logger = logging.getLogger(LOG_FILENAME)
+    logger.setLevel(logging.DEBUG)
+    # create file handler which logs even debug messages
+    fh = logging.handlers.RotatingFileHandler(LOG_FILENAME, maxBytes=1000000, backupCount=10)
+    # We'll leave the info logged to file at debug and alter the command line based upon cli options
+    fh.setLevel(logging.DEBUG)
+    # create console handler with a higher log level
+    ch = logging.StreamHandler()
+    if options.debug:
+        ch.setLevel(logging.DEBUG)
+    else:
+        ch.setLevel(logging.INFO)
+    # create formatters and add them to the handlers
+    # you can use the same one but I didn't want the datetime on the console
+    chformatter = logging.Formatter('%(levelname)-8s %(message)s')
+    fhformatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    ch.setFormatter(chformatter)
+    fh.setFormatter(fhformatter)
+    # add the handlers to logger
+    logger.addHandler(ch)
+    logger.addHandler(fh)
+
+    ##
+    ##########
+
+    logger.debug("=================================================================================")
+    logger.debug("========================== STARTING NEW SCRIPT RUN ==============================")
+    logger.debug("=================================================================================")
+
+
+    logger.info("Check the log file at %s for debug-level logging info" % LOG_FILENAME)
+    logger.info("Using start of %s and end of %s" % (options.start, options.end))
+
